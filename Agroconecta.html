@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja Virtual Agro</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+    /* ESTILOS DO BANNER */
+    .carousel {
+      width: 100%;
+      max-width: 1200px;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      margin: auto;
+    }
+    
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .carousel img.active {
+      opacity: 1;
+    }
+
+    /* ESTILOS DOS PRODUTOS */
+    .products { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .product-card { width: 220px; padding: 10px; border: 1px solid #ccc; text-align: center; border-radius: 10px; }
+    .product-card img { width: 100%; height: auto; border-radius: 10px; }
+
+    /* ESTILOS DO CARRINHO */
+    .cart { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+    .cart-items { list-style: none; padding: 0; }
+    .cart-items li { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .total { font-weight: bold; }
+
+  </style>
+</head>
+<body>
+
+<!-- BANNER ROTATIVO -->
+<div class="carousel">
+  <img src="/Users/Alessandra/Downloads/agroshop/agro conecta.png" class="active">
+  <img src="/Users/Alessandra/Downloads/agroshop/agro conecta.png">
+  <img src="/Users/Alessandra/Downloads/agroshop/agro conecta.png">
+</div>
+
+<!-- CONTEÚDO DA LOJA -->
+
+  <div class="products">
+    <div class="product-card">
+      <img src="https://png.pngtree.com/png-vector/20200908/ourlarge/pngtree-a-healthy-green-lettuce-png-image_2335953.jpg" alt="Alface">
+      <h3>Alface</h3>
+      <p>R$ 3,50</p>
+      <button onclick="addToCart('Alface', 3.5)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="product-card">
+      <img src="/Users/Alessandra/Downloads/agroshop/Design sem nome.png" alt="Tomate">
+      <h3>Tomate</h3>
+      <p>R$ 5,00</p>
+      <button onclick="addToCart('Tomate', 5)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="product-card">
+      <img src="" alt="Batata">
+      <h3>Batata</h3>
+      <p>R$ 4,00</p>
+      <button onclick="addToCart('Batata', 4)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="product-card">
+      <img src="https://via.placeholder.com/150" alt="Morango">
+      <h3>Morango</h3>
+      <p>R$ 8,00</p>
+      <button onclick="addToCart('Morango', 8)">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+  <div class="cart">
+    <h2>Carrinho</h2>
+    <ul class="cart-items" id="cart-items"></ul>
+    <p class="total" id="total">Total: R$ 0,00</p>
+    <button onclick="finalizePurchase()">Finalizar Compra</button>
+  </div>
+</div>
+
+<!-- SCRIPT PARA O BANNER ROTATIVO -->
+<script>
+  let index = 0;
+  const images = document.querySelectorAll(".carousel img");
+
+  function changeImage() {
+    images[index].classList.remove("active");
+    index = (index + 1) % images.length; // Loop infinito nas imagens
+    images[index].classList.add("active");
+  }
+
+  setInterval(changeImage, 3000); // Troca de imagem a cada 3 segundos
+</script>
+
+<!-- SCRIPT PARA O CARRINHO -->
+<script>
+  let cart = [];
+
+  function addToCart(productName, price) {
+    cart.push({ productName, price });
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    const totalElement = document.getElementById('total');
+    
+    cartItems.innerHTML = '';
+    let total = 0;
+    
+    cart.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `${item.productName} - R$ ${item.price.toFixed(2)} <button onclick="removeFromCart('${item.productName}')">Remover</button>`;
+      cartItems.appendChild(li);
+      total += item.price;
+    });
+    
+    totalElement.innerHTML = `Total: R$ ${total.toFixed(2)}`;
+  }
+
+  function removeFromCart(productName) {
+    cart = cart.filter(item => item.productName !== productName);
+    renderCart();
+  }
+
+  function finalizePurchase() {
+    if (cart.length > 0) {
+      alert('Compra finalizada!');
+      cart = [];
+      renderCart();
+    } else {
+      alert('Carrinho vazio!');
+    }
+  }
+</script>
+
+</body>
+</html>
